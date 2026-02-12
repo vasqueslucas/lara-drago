@@ -1,186 +1,206 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Valentine Animation</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Valentine 💖</title>
 
-<!-- Google Font -->
 <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
-
-<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<!-- jQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <style>
+:root{
+  --overlay: rgba(103,58,183,0.75);
+  --heart1: #ff4081;
+  --heart2: #e91e63;
+}
 
+/* base */
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
 body{
+  margin:0;
   background: url(https://subtlepatterns.com/patterns/noise_lines.png);
   font-family: 'Pacifico', cursive;
   overflow: hidden;
-  color: #fff;
+  color:#fff;
+  -webkit-tap-highlight-color: transparent;
 }
 
+/* overlay ocupa tudo */
 .bgoverlay{
-  background: rgba(103,58,183,0.7);
-  position: absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
+  background: var(--overlay);
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding:
+    calc(env(safe-area-inset-top) + 16px)
+    16px
+    calc(env(safe-area-inset-bottom) + 16px)
+    16px;
 }
 
+/* container responsivo */
 .container{
   position: relative;
-  margin: 120px auto 0 auto;
-  width: 320px;
+  width: min(320px, 92vw);
+  height: min(320px, 92vw);
+  display: grid;
+  place-items: center;
 }
 
+/* área clicável */
 .ico{
+  position: relative;
   display: block;
-  width: 320px;
-  height: 320px;
+  width: 100%;
+  height: 100%;
+  user-select: none;
 }
 
+/* animação de abrir — no mobile não explode tanto */
 .open .ico{
-  animation: open 4s forwards;
-  transform: scale(10);
+  animation: open 1.8s forwards;
+  transform: scale(6);
 }
 
 .ico .title{
   position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -95px;
-  margin-top: -73px;
+  inset: 0;
+  display: grid;
+  place-items: center;
   z-index: 4;
-  font-size: 50px;
+  font-size: clamp(28px, 7vw, 50px);
   color: #fff;
   cursor: pointer;
+  text-align: center;
   text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+  padding: 12px;
 }
 
 .open .ico .title{
   opacity: 0;
-  transition: all 0.3s ease;
-  top:-100px;
+  transition: all 0.25s ease;
+  transform: translateY(-24px);
 }
 
+/* corações (fontawesome) */
 .ico:before,
 .ico:after,
 .ico2:before,
 .ico2:after{
   position: absolute;
-  top:0;
-  left:0;
-  display: block;
-  font-size: 20em;
-  color: #ff4081;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(220px, 62vw, 320px);
   content: "\f004";
   font-family: "Font Awesome 6 Free";
   font-weight: 900;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.ico2:before,
-.ico2:after{
-  color: #e91e63;
-}
+.ico:before{ color: var(--heart1); z-index: 3; }
+.ico:after{ color: var(--heart1); animation: explode 2.8s infinite; opacity: .9; }
+.ico2:before{ color: var(--heart2); animation: explodeSmall 2.2s infinite; opacity: .95; }
+.ico2:after{ color: var(--heart2); animation: explodeSmall 1.6s infinite; opacity: .85; }
 
-.ico:after{
-  animation: explode 4s infinite;
-}
-
-.ico2:before{
-  animation: explodeSmall 3s infinite;
-}
-
-.ico2:after{
-  animation: explodeSmall 2s infinite;
-}
-
+/* texto final (responsivo e visível em celular) */
 .endtext{
-  opacity:0;
+  opacity: 0;
   position: absolute;
-  top:-100px;
-  width:100%;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  gap: 10px;
+  padding: 14px;
+  text-align: center;
 }
 
 .open .endtext{
-  top:0;
   opacity: 1;
-  animation: show 5s forwards;
+  animation: show 1.3s forwards;
 }
 
 .endtext .close{
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 6px;
+  right: 8px;
   cursor: pointer;
+  font-size: 22px;
+  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+  padding: 10px;
 }
 
 .endtext h1,
 .endtext h2,
 .endtext h3{
-  text-align: center;
+  margin: 0;
+  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
   font-weight: normal;
 }
 
-.endtext h1{ font-size: 50px; }
-.endtext h2{ font-size: 30px; }
-.endtext h3{ font-size: 20px; }
+.endtext h1{ font-size: clamp(28px, 7vw, 50px); }
+.endtext h2{ font-size: clamp(18px, 5vw, 30px); }
+.endtext h3{ font-size: clamp(14px, 4vw, 20px); opacity: .95; }
 
+/* animações */
 @keyframes explode {
   from { transform: scale(1); opacity: 1; }
-  to { transform: scale(1.6); opacity: 0; }
+  to   { transform: scale(1.35); opacity: 0; }
 }
-
 @keyframes explodeSmall {
   from { transform: scale(1); opacity: 1; }
-  to { transform: scale(1.2); opacity: 0; }
+  to   { transform: scale(1.18); opacity: 0; }
 }
-
 @keyframes open {
   from { transform: scale(1); }
-  to { transform: scale(10); }
+  to   { transform: scale(6); }
 }
-
 @keyframes show {
-  from { opacity: 0; top: -100px; }
-  to { opacity: 1; top:0; }
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+/* acessibilidade: reduz movimento */
+@media (prefers-reduced-motion: reduce){
+  .ico:after, .ico2:before, .ico2:after{ animation: none; }
+  .open .ico{ animation: none; transform: scale(1); }
+  .open .endtext{ animation: none; }
+}
 </style>
 </head>
 
 <body>
+  <div class="bgoverlay">
+    <div class="container">
+      <span class="ico">
+        <span class="ico2"></span>
+        <span class="title">Clica aqui 💘</span>
+      </span>
 
-<div class="bgoverlay">
-  <div class="container">
-    <span class="ico">
-      <span class="ico2"></span>
-      <span class="title">Click Me</span>
-    </span>
-    <div class="endtext">
-      <span class="close"><i class="fa fa-times"></i></span>  
-      <h1>oii lara</h1>
-      <h2>vc é absurdamente linda</h2>
-      <h3>~Skippy</h3>
+      <div class="endtext">
+        <span class="close" title="Reiniciar"><i class="fa fa-times"></i></span>
+        <h1>oii lara</h1>
+        <h2>Vc é absurda de linda💖</h2>
+        <h3>~Lucas Vasques</h3>
+      </div>
     </div>
   </div>
-</div>
 
 <script>
 $(document).ready(function(){
-  $('.title').click(function(){
+  $('.title').on('click', function(){
     $('.container').addClass('open');
   });
-  
-  $('.close').click(function(){
+  $('.close').on('click', function(){
     $('.container').removeClass('open');
   });
 });
 </script>
-
 </body>
 </html>
