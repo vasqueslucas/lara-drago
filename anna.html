@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Valentine 💖</title>
+
+<link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<style>
+:root{
+  --overlay: rgba(103,58,183,0.75);
+  --heart1: #ff4081;
+  --heart2: #e91e63;
+}
+
+/* base */
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  background: url(https://subtlepatterns.com/patterns/noise_lines.png);
+  font-family: 'Pacifico', cursive;
+  overflow: hidden;
+  color:#fff;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* overlay ocupa tudo */
+.bgoverlay{
+  background: var(--overlay);
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding:
+    calc(env(safe-area-inset-top) + 16px)
+    16px
+    calc(env(safe-area-inset-bottom) + 16px)
+    16px;
+}
+
+/* container responsivo */
+.container{
+  position: relative;
+  width: min(320px, 92vw);
+  height: min(320px, 92vw);
+  display: grid;
+  place-items: center;
+}
+
+/* área clicável */
+.ico{
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+
+/* animação de abrir — no mobile não explode tanto */
+.open .ico{
+  animation: open 1.8s forwards;
+  transform: scale(6);
+}
+
+.ico .title{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 4;
+  font-size: clamp(28px, 7vw, 50px);
+  color: #fff;
+  cursor: pointer;
+  text-align: center;
+  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+  padding: 12px;
+}
+
+.open .ico .title{
+  opacity: 0;
+  transition: all 0.25s ease;
+  transform: translateY(-24px);
+}
+
+/* corações (fontawesome) */
+.ico:before,
+.ico:after,
+.ico2:before,
+.ico2:after{
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(220px, 62vw, 320px);
+  content: "\f004";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ico:before{ color: var(--heart1); z-index: 3; }
+.ico:after{ color: var(--heart1); animation: explode 2.8s infinite; opacity: .9; }
+.ico2:before{ color: var(--heart2); animation: explodeSmall 2.2s infinite; opacity: .95; }
+.ico2:after{ color: var(--heart2); animation: explodeSmall 1.6s infinite; opacity: .85; }
+
+/* texto final (responsivo e visível em celular) */
+.endtext{
+  opacity: 0;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  gap: 10px;
+  padding: 14px;
+  text-align: center;
+}
+
+.open .endtext{
+  opacity: 1;
+  animation: show 1.3s forwards;
+}
+
+.endtext .close{
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  cursor: pointer;
+  font-size: 22px;
+  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+  padding: 10px;
+}
+
+.endtext h1,
+.endtext h2,
+.endtext h3{
+  margin: 0;
+  text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+  font-weight: normal;
+}
+
+.endtext h1{ font-size: clamp(28px, 7vw, 50px); }
+.endtext h2{ font-size: clamp(18px, 5vw, 30px); }
+.endtext h3{ font-size: clamp(14px, 4vw, 20px); opacity: .95; }
+
+/* animações */
+@keyframes explode {
+  from { transform: scale(1); opacity: 1; }
+  to   { transform: scale(1.35); opacity: 0; }
+}
+@keyframes explodeSmall {
+  from { transform: scale(1); opacity: 1; }
+  to   { transform: scale(1.18); opacity: 0; }
+}
+@keyframes open {
+  from { transform: scale(1); }
+  to   { transform: scale(6); }
+}
+@keyframes show {
+  from { opacity: 0; transform: translateY(-18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* acessibilidade: reduz movimento */
+@media (prefers-reduced-motion: reduce){
+  .ico:after, .ico2:before, .ico2:after{ animation: none; }
+  .open .ico{ animation: none; transform: scale(1); }
+  .open .endtext{ animation: none; }
+}
+</style>
+</head>
+
+<body>
+  <div class="bgoverlay">
+    <div class="container">
+      <span class="ico">
+        <span class="ico2"></span>
+        <span class="title">Clica aqui 💘</span>
+      </span>
+
+      <div class="endtext">
+        <span class="close" title="Reiniciar"><i class="fa fa-times"></i></span>
+        <h1>oii anna</h1>
+        <h2>Vc é absurda de linda💖</h2>
+        <h3>~Lucas Vasques</h3>
+      </div>
+    </div>
+  </div>
+
+<script>
+$(document).ready(function(){
+  $('.title').on('click', function(){
+    $('.container').addClass('open');
+  });
+  $('.close').on('click', function(){
+    $('.container').removeClass('open');
+  });
+});
+</script>
+</body>
+</html>
